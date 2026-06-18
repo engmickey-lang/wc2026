@@ -253,81 +253,155 @@ const GROUPS={
 // HARDCODED MATCHES (instant display + fallback)
 // Dubai times = UTC+4. All confirmed results included.
 // ══════════════════════════════════════════════════════════
+// ── UTC = ET + 4hrs. Dubai = UTC + 4hrs. So Dubai = ET + 8hrs ──
+// All UTC times below are calculated as: ET kickoff + 4 hours
+// Dubai display = UTC + 4 (handled automatically by toLocaleTimeString)
 const SEED=[
-  // MD1 — ALL DONE
+  // ── MD1 ALL DONE ──────────────────────────────────────────────────────
+  // Mexico vs S.Africa: 3pm ET Jun11 = 19:00 UTC → 23:00 Dubai Jun11
   {t1:'Mexico',      t2:'South Africa',         s:[2,0], g:'A', v:'Mexico City',   utc:'2026-06-11T19:00Z'},
-  {t1:'South Korea', t2:'Czechia',               s:[2,1], g:'A', v:'Guadalajara',   utc:'2026-06-12T02:00Z'},
-  {t1:'USA',         t2:'Paraguay',              s:[4,1], g:'D', v:'Los Angeles',   utc:'2026-06-12T22:00Z'},
+  // S.Korea vs Czechia: 8pm ET Jun11 = 00:00 UTC Jun12 → 04:00 Dubai Jun12
+  {t1:'South Korea', t2:'Czechia',               s:[2,1], g:'A', v:'Guadalajara',   utc:'2026-06-12T00:00Z'},
+  // Canada vs Bosnia: 3pm ET Jun12 = 19:00 UTC → 23:00 Dubai Jun12
   {t1:'Canada',      t2:'Bosnia & Herzegovina',  s:[1,1], g:'B', v:'Toronto',       utc:'2026-06-12T19:00Z'},
+  // USA vs Paraguay: 6pm ET Jun12 = 22:00 UTC → 02:00 Dubai Jun13
+  {t1:'USA',         t2:'Paraguay',              s:[4,1], g:'D', v:'Los Angeles',   utc:'2026-06-12T22:00Z'},
+  // Switzerland vs Qatar: 1pm ET Jun13 = 17:00 UTC → 21:00 Dubai Jun13
   {t1:'Switzerland', t2:'Qatar',                 s:[1,1], g:'B', v:'Santa Clara',   utc:'2026-06-13T17:00Z'},
-  {t1:'Australia',   t2:'Türkiye',               s:[2,0], g:'D', v:'Vancouver',     utc:'2026-06-14T01:00Z'},
+  // Brazil vs Morocco: 7pm ET Jun13 = 23:00 UTC → 03:00 Dubai Jun14
   {t1:'Brazil',      t2:'Morocco',               s:[1,1], g:'C', v:'New Jersey',    utc:'2026-06-13T23:00Z'},
+  // Scotland vs Haiti: 10pm ET Jun13 = 02:00 UTC Jun14 → 06:00 Dubai Jun14
   {t1:'Scotland',    t2:'Haiti',                 s:[1,0], g:'C', v:'Boston',        utc:'2026-06-14T02:00Z'},
+  // Australia vs Türkiye: 9pm ET Jun13 = 01:00 UTC Jun14 → 05:00 Dubai Jun14
+  {t1:'Australia',   t2:'Türkiye',               s:[2,0], g:'D', v:'Vancouver',     utc:'2026-06-14T01:00Z'},
+  // Germany vs Curaçao: 1pm ET Jun14 = 17:00 UTC → 21:00 Dubai Jun14
   {t1:'Germany',     t2:'Curaçao',               s:[7,1], g:'E', v:'Houston',       utc:'2026-06-14T17:00Z'},
+  // Ivory Coast vs Ecuador: 7pm ET Jun14 = 23:00 UTC → 03:00 Dubai Jun15
   {t1:'Ivory Coast', t2:'Ecuador',               s:[1,0], g:'E', v:'Philadelphia',  utc:'2026-06-14T23:00Z'},
+  // Netherlands vs Japan: 9pm ET Jun14 = 01:00 UTC Jun15 → 05:00 Dubai Jun15
   {t1:'Netherlands', t2:'Japan',                 s:[2,2], g:'F', v:'Dallas',        utc:'2026-06-15T01:00Z'},
-  {t1:'Sweden',      t2:'Tunisia',               s:[5,1], g:'F', v:'Monterrey',     utc:'2026-06-15T10:00Z'},
+  // Sweden vs Tunisia: 6pm ET Jun15 local Mty = 22:00 UTC Jun14? No - 10pm CDT = 10pm-5=03:00 UTC Jun15
+  // Sky Sports says "Group F: Sweden vs Tunisia, midnight BST Jun16" = 23:00 UTC Jun15 → 03:00 Dubai Jun16
+  {t1:'Sweden',      t2:'Tunisia',               s:[5,1], g:'F', v:'Monterrey',     utc:'2026-06-15T23:00Z'},
+  // Spain vs Cape Verde: noon ET Jun15 = 16:00 UTC → 20:00 Dubai Jun15
   {t1:'Spain',       t2:'Cape Verde',            s:[0,0], g:'H', v:'Atlanta',       utc:'2026-06-15T16:00Z'},
-  {t1:'Saudi Arabia',t2:'Uruguay',               s:[1,1], g:'H', v:'Miami',         utc:'2026-06-16T06:00Z'},
-  {t1:'Belgium',     t2:'Egypt',                 s:[1,1], g:'G', v:'Seattle',       utc:'2026-06-16T08:00Z'},
-  {t1:'Iran',        t2:'New Zealand',           s:[2,2], g:'G', v:'Los Angeles',   utc:'2026-06-16T11:00Z'},
+  // Saudi Arabia vs Uruguay: 2am BST Jun16 = 01:00 UTC Jun16 → 05:00 Dubai Jun16
+  {t1:'Saudi Arabia',t2:'Uruguay',               s:[1,1], g:'H', v:'Miami',         utc:'2026-06-16T01:00Z'},
+  // Belgium vs Egypt: 4pm ET Jun15 = 20:00 UTC → 00:00 Dubai Jun16
+  {t1:'Belgium',     t2:'Egypt',                 s:[1,1], g:'G', v:'Seattle',       utc:'2026-06-15T20:00Z'},
+  // Iran vs New Zealand: 7pm ET Jun15 = 23:00 UTC → 03:00 Dubai Jun16
+  {t1:'Iran',        t2:'New Zealand',           s:[2,2], g:'G', v:'Los Angeles',   utc:'2026-06-15T23:00Z'},
+  // France vs Senegal: 9pm ET Jun16 = 01:00 UTC Jun17 → 05:00 Dubai Jun17
   {t1:'France',      t2:'Senegal',               s:[3,1], g:'I', v:'New York',      utc:'2026-06-17T01:00Z'},
+  // Norway vs Iraq: midnight ET Jun16/17 = 04:00 UTC Jun17 → 08:00 Dubai Jun17
   {t1:'Norway',      t2:'Iraq',                  s:[4,1], g:'I', v:'Philadelphia',  utc:'2026-06-17T04:00Z'},
+  // Argentina vs Algeria: 1am ET Jun17 = 05:00 UTC → 09:00 Dubai Jun17
   {t1:'Argentina',   t2:'Algeria',               s:[3,0], g:'J', v:'Kansas City',   utc:'2026-06-17T05:00Z'},
+  // Austria vs Jordan: 5am ET Jun17 = 09:00 UTC → 13:00 Dubai Jun17
   {t1:'Austria',     t2:'Jordan',                s:[3,1], g:'J', v:'San Francisco', utc:'2026-06-17T09:00Z'},
+  // Portugal vs DR Congo: 1pm ET Jun17 = 17:00 UTC → 21:00 Dubai Jun17
   {t1:'Portugal',    t2:'DR Congo',              s:[1,1], g:'K', v:'Houston',       utc:'2026-06-17T17:00Z'},
-  {t1:'England',     t2:'Croatia',               s:[4,2], g:'L', v:'Dallas',        utc:'2026-06-18T00:00Z'},
-  // MD2 — Jun 18 Dubai (some done, some live/upcoming)
-  {t1:'Czechia',     t2:'South Africa',          s:null,  g:'A', v:'Atlanta',       utc:'2026-06-18T16:00Z'},
-  {t1:'Switzerland', t2:'Bosnia & Herzegovina',  s:null,  g:'B', v:'Los Angeles',   utc:'2026-06-18T19:00Z'},
+  // England vs Croatia: 4pm ET Jun17 = 20:00 UTC → 00:00 Dubai Jun18
+  {t1:'England',     t2:'Croatia',               s:[4,2], g:'L', v:'Dallas',        utc:'2026-06-17T20:00Z'},
+
+  // ── MD2 ───────────────────────────────────────────────────────────────
+  // Ghana vs Panama: 7pm ET Jun17 = 23:00 UTC → 03:00 Dubai Jun18
   {t1:'Ghana',       t2:'Panama',                s:null,  g:'L', v:'Toronto',       utc:'2026-06-17T23:00Z'},
+  // Uzbekistan vs Colombia: 10pm ET Jun17 = 02:00 UTC Jun18 → 06:00 Dubai Jun18
+  {t1:'Uzbekistan',  t2:'Colombia',              s:null,  g:'K', v:'Mexico City',   utc:'2026-06-18T02:00Z'},
+  // Czechia vs S.Africa: noon ET Jun18 = 16:00 UTC → 20:00 Dubai Jun18
+  {t1:'Czechia',     t2:'South Africa',          s:null,  g:'A', v:'Atlanta',       utc:'2026-06-18T16:00Z'},
+  // Switzerland vs Bosnia: 3pm ET Jun18 = 19:00 UTC → 23:00 Dubai Jun18
+  {t1:'Switzerland', t2:'Bosnia & Herzegovina',  s:null,  g:'B', v:'Los Angeles',   utc:'2026-06-18T19:00Z'},
+  // Canada vs Qatar: 6pm ET Jun18 = 22:00 UTC → 02:00 Dubai Jun19
   {t1:'Canada',      t2:'Qatar',                 s:null,  g:'B', v:'Vancouver',     utc:'2026-06-18T22:00Z'},
+  // Mexico vs S.Korea: 11pm ET Jun18 = 03:00 UTC Jun19 → 07:00 Dubai Jun19
   {t1:'Mexico',      t2:'South Korea',           s:null,  g:'A', v:'Guadalajara',   utc:'2026-06-19T03:00Z'},
-  {t1:'Uzbekistan',  t2:'Colombia',              s:null,  g:'K', v:'Mexico City',   utc:'2026-06-19T02:00Z'},
-  // MD2 upcoming
+  // USA vs Australia: 3pm ET Jun19 = 19:00 UTC → 23:00 Dubai Jun19
   {t1:'USA',         t2:'Australia',             s:null,  g:'D', v:'Seattle',       utc:'2026-06-19T19:00Z'},
-  {t1:'Scotland',    t2:'Morocco',               s:null,  g:'C', v:'Boston',        utc:'2026-06-20T02:00Z'},
-  {t1:'Brazil',      t2:'Haiti',                 s:null,  g:'C', v:'Philadelphia',  utc:'2026-06-20T04:30Z'},
-  {t1:'Türkiye',     t2:'Paraguay',              s:null,  g:'D', v:'Santa Clara',   utc:'2026-06-20T08:00Z'},
-  {t1:'Netherlands', t2:'Sweden',                s:null,  g:'F', v:'Houston',       utc:'2026-06-20T21:00Z'},
-  {t1:'Germany',     t2:'Ivory Coast',           s:null,  g:'E', v:'Toronto',       utc:'2026-06-21T00:00Z'},
-  {t1:'Ecuador',     t2:'Curaçao',               s:null,  g:'E', v:'Kansas City',   utc:'2026-06-21T04:00Z'},
-  {t1:'Japan',       t2:'Tunisia',               s:null,  g:'F', v:'Monterrey',     utc:'2026-06-21T08:00Z'},
-  {t1:'Spain',       t2:'Saudi Arabia',          s:null,  g:'H', v:'Atlanta',       utc:'2026-06-22T16:00Z'},
-  {t1:'Argentina',   t2:'Austria',               s:null,  g:'J', v:'Dallas',        utc:'2026-06-22T19:00Z'},
-  {t1:'Uruguay',     t2:'Cape Verde',            s:null,  g:'H', v:'Miami',         utc:'2026-06-23T02:00Z'},
-  {t1:'Belgium',     t2:'Iran',                  s:null,  g:'G', v:'Los Angeles',   utc:'2026-06-22T19:00Z'},
+  // Scotland vs Morocco: 6pm ET Jun19 = 22:00 UTC → 02:00 Dubai Jun20
+  {t1:'Scotland',    t2:'Morocco',               s:null,  g:'C', v:'Boston',        utc:'2026-06-19T22:00Z'},
+  // Brazil vs Haiti: 9pm ET Jun19 = 01:00 UTC Jun20 → 05:00 Dubai Jun20
+  {t1:'Brazil',      t2:'Haiti',                 s:null,  g:'C', v:'Philadelphia',  utc:'2026-06-20T01:00Z'},
+  // Türkiye vs Paraguay: midnight ET Jun19/20 = 04:00 UTC Jun20 → 08:00 Dubai Jun20
+  {t1:'Türkiye',     t2:'Paraguay',              s:null,  g:'D', v:'Santa Clara',   utc:'2026-06-20T04:00Z'},
+  // Netherlands vs Sweden: 1pm ET Jun20 = 17:00 UTC → 21:00 Dubai Jun20
+  {t1:'Netherlands', t2:'Sweden',                s:null,  g:'F', v:'Houston',       utc:'2026-06-20T17:00Z'},
+  // Germany vs Ivory Coast: 4pm ET Jun20 = 20:00 UTC → 00:00 Dubai Jun21
+  {t1:'Germany',     t2:'Ivory Coast',           s:null,  g:'E', v:'Toronto',       utc:'2026-06-20T20:00Z'},
+  // Ecuador vs Curaçao: 8pm ET Jun20 = 00:00 UTC Jun21 → 04:00 Dubai Jun21
+  {t1:'Ecuador',     t2:'Curaçao',               s:null,  g:'E', v:'Kansas City',   utc:'2026-06-21T00:00Z'},
+  // Tunisia vs Japan: 10pm ET Jun20 = 02:00 UTC Jun21 → 06:00 Dubai Jun21
+  {t1:'Japan',       t2:'Tunisia',               s:null,  g:'F', v:'Monterrey',     utc:'2026-06-21T02:00Z'},
+  // Spain vs Saudi Arabia: noon ET Jun21 = 16:00 UTC → 20:00 Dubai Jun21
+  {t1:'Spain',       t2:'Saudi Arabia',          s:null,  g:'H', v:'Atlanta',       utc:'2026-06-21T16:00Z'},
+  // Argentina vs Austria: 3pm ET Jun21 = 19:00 UTC → 23:00 Dubai Jun21
+  {t1:'Argentina',   t2:'Austria',               s:null,  g:'J', v:'Dallas',        utc:'2026-06-21T19:00Z'},
+  // Belgium vs Iran: 4pm ET Jun21 = 20:00 UTC → 00:00 Dubai Jun22
+  {t1:'Belgium',     t2:'Iran',                  s:null,  g:'G', v:'Los Angeles',   utc:'2026-06-21T20:00Z'},
+  // Uruguay vs Cape Verde: 7pm ET Jun21 = 23:00 UTC → 03:00 Dubai Jun22
+  {t1:'Uruguay',     t2:'Cape Verde',            s:null,  g:'H', v:'Miami',         utc:'2026-06-21T23:00Z'},
+  // New Zealand vs Egypt: 9pm ET Jun22 = 01:00 UTC Jun23 → 05:00 Dubai Jun23
   {t1:'New Zealand', t2:'Egypt',                 s:null,  g:'G', v:'Vancouver',     utc:'2026-06-23T01:00Z'},
-  {t1:'France',      t2:'Iraq',                  s:null,  g:'I', v:'Philadelphia',  utc:'2026-06-23T21:00Z'},
-  {t1:'Norway',      t2:'Senegal',               s:null,  g:'I', v:'Toronto',       utc:'2026-06-24T00:00Z'},
-  {t1:'Jordan',      t2:'Algeria',               s:null,  g:'J', v:'Santa Clara',   utc:'2026-06-24T03:00Z'},
+  // Portugal vs Uzbekistan: 1pm ET Jun23 = 17:00 UTC → 21:00 Dubai Jun23
   {t1:'Portugal',    t2:'Uzbekistan',            s:null,  g:'K', v:'Houston',       utc:'2026-06-23T17:00Z'},
+  // England vs Ghana: 4pm ET Jun23 = 20:00 UTC → 00:00 Dubai Jun24
   {t1:'England',     t2:'Ghana',                 s:null,  g:'L', v:'Boston',        utc:'2026-06-23T20:00Z'},
+  // Panama vs Croatia: 7pm ET Jun23 = 23:00 UTC → 03:00 Dubai Jun24
   {t1:'Panama',      t2:'Croatia',               s:null,  g:'L', v:'Toronto',       utc:'2026-06-23T23:00Z'},
+  // France vs Iraq: 5pm ET Jun23 = 21:00 UTC → 01:00 Dubai Jun24
+  {t1:'France',      t2:'Iraq',                  s:null,  g:'I', v:'Philadelphia',  utc:'2026-06-23T21:00Z'},
+  // Norway vs Senegal: 8pm ET Jun23 = 00:00 UTC Jun24 → 04:00 Dubai Jun24
+  {t1:'Norway',      t2:'Senegal',               s:null,  g:'I', v:'Toronto',       utc:'2026-06-24T00:00Z'},
+  // Colombia vs DR Congo: 10pm ET Jun23 = 02:00 UTC Jun24 → 06:00 Dubai Jun24
   {t1:'Colombia',    t2:'DR Congo',              s:null,  g:'K', v:'Zapopan',       utc:'2026-06-24T02:00Z'},
-  // MD3
+  // Jordan vs Algeria: midnight ET Jun23/24 = 04:00 UTC Jun24 → 08:00 Dubai Jun24
+  {t1:'Jordan',      t2:'Algeria',               s:null,  g:'J', v:'Santa Clara',   utc:'2026-06-24T04:00Z'},
+  // ── MD3 ───────────────────────────────────────────────────────────────
+  // Switzerland vs Canada: 3pm ET Jun24 = 19:00 UTC → 23:00 Dubai Jun24
   {t1:'Switzerland', t2:'Canada',                s:null,  g:'B', v:'Vancouver',     utc:'2026-06-24T19:00Z'},
+  // Bosnia vs Qatar: 3pm ET Jun24 = 19:00 UTC → 23:00 Dubai Jun24
   {t1:'Bosnia & Herzegovina',t2:'Qatar',         s:null,  g:'B', v:'Seattle',       utc:'2026-06-24T19:00Z'},
+  // Scotland vs Brazil: 6pm ET Jun24 = 22:00 UTC → 02:00 Dubai Jun25
   {t1:'Scotland',    t2:'Brazil',                s:null,  g:'C', v:'Miami',         utc:'2026-06-24T22:00Z'},
+  // Morocco vs Haiti: 6pm ET Jun24 = 22:00 UTC → 02:00 Dubai Jun25
   {t1:'Morocco',     t2:'Haiti',                 s:null,  g:'C', v:'Atlanta',       utc:'2026-06-24T22:00Z'},
+  // Czechia vs Mexico: 9pm ET Jun24 = 01:00 UTC Jun25 → 05:00 Dubai Jun25
   {t1:'Czechia',     t2:'Mexico',                s:null,  g:'A', v:'Mexico City',   utc:'2026-06-25T01:00Z'},
+  // S.Africa vs S.Korea: 9pm ET Jun24 = 01:00 UTC Jun25 → 05:00 Dubai Jun25
   {t1:'South Africa',t2:'South Korea',           s:null,  g:'A', v:'Monterrey',     utc:'2026-06-25T01:00Z'},
+  // Ecuador vs Germany: 4pm ET Jun25 = 20:00 UTC → 00:00 Dubai Jun26
   {t1:'Ecuador',     t2:'Germany',               s:null,  g:'E', v:'New Jersey',    utc:'2026-06-25T20:00Z'},
+  // Curaçao vs Ivory Coast: 4pm ET Jun25 = 20:00 UTC → 00:00 Dubai Jun26
   {t1:'Curaçao',     t2:'Ivory Coast',           s:null,  g:'E', v:'Philadelphia',  utc:'2026-06-25T20:00Z'},
-  {t1:'Japan',       t2:'Sweden',                s:null,  g:'F', v:'Dallas',        utc:'2026-06-25T22:00Z'},
-  {t1:'Tunisia',     t2:'Netherlands',           s:null,  g:'F', v:'Kansas City',   utc:'2026-06-25T22:00Z'},
+  // Japan vs Sweden: 8pm ET Jun25 = 00:00 UTC Jun26 → 04:00 Dubai Jun26
+  {t1:'Japan',       t2:'Sweden',                s:null,  g:'F', v:'Dallas',        utc:'2026-06-26T00:00Z'},
+  // Tunisia vs Netherlands: 8pm ET Jun25 = 00:00 UTC Jun26 → 04:00 Dubai Jun26
+  {t1:'Tunisia',     t2:'Netherlands',           s:null,  g:'F', v:'Kansas City',   utc:'2026-06-26T00:00Z'},
+  // Spain vs Uruguay: 9pm ET Jun26 = 01:00 UTC Jun27 → 05:00 Dubai Jun27
   {t1:'Spain',       t2:'Uruguay',               s:null,  g:'H', v:'Guadalajara',   utc:'2026-06-27T01:00Z'},
+  // Cape Verde vs Saudi Arabia: 9pm ET Jun26 = 01:00 UTC Jun27 → 05:00 Dubai Jun27
   {t1:'Cape Verde',  t2:'Saudi Arabia',          s:null,  g:'H', v:'Houston',       utc:'2026-06-27T01:00Z'},
-  {t1:'Egypt',       t2:'Iran',                  s:null,  g:'G', v:'Seattle',       utc:'2026-06-28T00:00Z'},
-  {t1:'New Zealand', t2:'Belgium',               s:null,  g:'G', v:'Vancouver',     utc:'2026-06-28T00:00Z'},
-  {t1:'Norway',      t2:'France',                s:null,  g:'I', v:'Boston',        utc:'2026-06-27T19:00Z'},
-  {t1:'Senegal',     t2:'Iraq',                  s:null,  g:'I', v:'Toronto',       utc:'2026-06-27T19:00Z'},
+  // Egypt vs Iran: 4pm ET Jun27 = 20:00 UTC → 00:00 Dubai Jun28
+  {t1:'Egypt',       t2:'Iran',                  s:null,  g:'G', v:'Seattle',       utc:'2026-06-27T20:00Z'},
+  // New Zealand vs Belgium: 4pm ET Jun27 = 20:00 UTC → 00:00 Dubai Jun28
+  {t1:'New Zealand', t2:'Belgium',               s:null,  g:'G', v:'Vancouver',     utc:'2026-06-27T20:00Z'},
+  // Norway vs France: 4pm ET Jun27 = 20:00 UTC → 00:00 Dubai Jun28 (BST confirms 9pm)
+  {t1:'Norway',      t2:'France',                s:null,  g:'I', v:'Boston',        utc:'2026-06-27T20:00Z'},
+  // Senegal vs Iraq: 4pm ET Jun27 = 20:00 UTC → 00:00 Dubai Jun28
+  {t1:'Senegal',     t2:'Iraq',                  s:null,  g:'I', v:'Toronto',       utc:'2026-06-27T20:00Z'},
+  // Algeria vs Austria: 10pm ET Jun27 = 02:00 UTC Jun28 → 06:00 Dubai Jun28
   {t1:'Algeria',     t2:'Austria',               s:null,  g:'J', v:'Kansas City',   utc:'2026-06-28T02:00Z'},
+  // Jordan vs Argentina: 10pm ET Jun27 = 02:00 UTC Jun28 → 06:00 Dubai Jun28
   {t1:'Jordan',      t2:'Argentina',             s:null,  g:'J', v:'Dallas',        utc:'2026-06-28T02:00Z'},
-  {t1:'Colombia',    t2:'Portugal',              s:null,  g:'K', v:'Miami',         utc:'2026-06-27T23:30Z'},
-  {t1:'DR Congo',    t2:'Uzbekistan',            s:null,  g:'K', v:'Atlanta',       utc:'2026-06-27T23:30Z'},
+  // Panama vs England: 5pm ET Jun27 = 21:00 UTC → 01:00 Dubai Jun28
   {t1:'Panama',      t2:'England',               s:null,  g:'L', v:'New Jersey',    utc:'2026-06-27T21:00Z'},
+  // Croatia vs Ghana: 5pm ET Jun27 = 21:00 UTC → 01:00 Dubai Jun28
   {t1:'Croatia',     t2:'Ghana',                 s:null,  g:'L', v:'Philadelphia',  utc:'2026-06-27T21:00Z'},
+  // Colombia vs Portugal: 7:30pm ET Jun27 = 23:30 UTC → 03:30 Dubai Jun28
+  {t1:'Colombia',    t2:'Portugal',              s:null,  g:'K', v:'Miami',         utc:'2026-06-27T23:30Z'},
+  // DR Congo vs Uzbekistan: 7:30pm ET Jun27 = 23:30 UTC → 03:30 Dubai Jun28
+  {t1:'DR Congo',    t2:'Uzbekistan',            s:null,  g:'K', v:'Atlanta',       utc:'2026-06-27T23:30Z'},
 ];
 
 // ══════════════════════════════════════════════════════════
