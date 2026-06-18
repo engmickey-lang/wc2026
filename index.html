@@ -10,7 +10,7 @@
    HOW TO USE THIS FILE:
    1. Get a FREE API key at: https://dashboard.api-football.com
       (free plan = 100 req/day, no credit card)
-   2. Paste your key below where it says 85edc00fec0a54d9277f39b406a3225e
+   2. Paste your key below where it says YOUR_API_KEY_HERE
    3. Host on GitHub Pages, Netlify Drop, or any web server
    4. Share the URL — everyone gets live data automatically
    ══════════════════════════════════════════════════ */
@@ -347,7 +347,7 @@ async function loadAll(force=false) {
   txt.className = 'sbar-txt';
 
   // Check API key
-  if (API_KEY === '85edc00fec0a54d9277f39b406a3225e') {
+  if (API_KEY === '13f12d608eda930e35fa22b47f67d658') {
     document.getElementById('setupBanner').style.display = 'block';
     txt.innerHTML = '<b>⚠ No API key</b> — see setup instructions above';
     txt.className = 'sbar-txt err';
@@ -693,7 +693,7 @@ function renderFallback() {
   const msg = `<div class="err-box">
     ⚙️ <strong>API key not set.</strong><br><br>
     Get a free key at <a href="https://dashboard.api-football.com" target="_blank">dashboard.api-football.com</a>
-    and replace <code>85edc00fec0a54d9277f39b406a3225e</code> in this file.<br><br>
+    and replace <code>YOUR_API_KEY_HERE</code> in this file.<br><br>
     Then host on <a href="https://app.netlify.com/drop" target="_blank">Netlify Drop</a> for a shareable live URL.
   </div>`;
   ['today','groups','sched'].forEach(p => document.getElementById(`panel-${p}`).innerHTML = msg);
