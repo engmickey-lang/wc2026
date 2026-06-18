@@ -209,7 +209,7 @@ const WC_SEASON = 2026;
   <h2>⚙️ One-time setup needed</h2>
   <p>
     Get a <strong>free API key</strong> at <a href="https://dashboard.api-football.com" target="_blank">dashboard.api-football.com</a> (no credit card, 100 req/day free)<br>
-    Then open this file in a text editor and replace <code>85edc00fec0a54d9277f39b406a3225e</code> with your key.<br>
+    Then open this file in a text editor and replace <code>YOUR_API_KEY_HERE</code> with your key.<br>
     Host on <a href="https://pages.github.com" target="_blank">GitHub Pages</a> or drag to <a href="https://app.netlify.com/drop" target="_blank">Netlify Drop</a> for a shareable URL.
   </p>
 </div>
@@ -347,7 +347,7 @@ async function loadAll(force=false) {
   txt.className = 'sbar-txt';
 
   // Check API key
-  if (API_KEY === '13f12d608eda930e35fa22b47f67d658') {
+  if (API_KEY === 'YOUR_API_KEY_HERE') {
     document.getElementById('setupBanner').style.display = 'block';
     txt.innerHTML = '<b>⚠ No API key</b> — see setup instructions above';
     txt.className = 'sbar-txt err';
